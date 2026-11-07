@@ -414,6 +414,10 @@
         "named": true
       },
       {
+        "type": "conditional_const_trait_bound",
+        "named": true
+      },
+      {
         "type": "dynamic_type",
         "named": true
       },
@@ -481,6 +485,10 @@
         "types": [
           {
             "type": "bounded_type",
+            "named": true
+          },
+          {
+            "type": "conditional_const_trait_bound",
             "named": true
           },
           {
@@ -1340,6 +1348,21 @@
           }
         ]
       }
+    }
+  },
+  {
+    "type": "conditional_const_trait_bound",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "_type",
+          "named": true
+        }
+      ]
     }
   },
   {

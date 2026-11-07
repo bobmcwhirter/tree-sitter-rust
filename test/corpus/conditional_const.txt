@@ -1,0 +1,132 @@
+==================
+Conditional const bounds in impl Trait and where clauses
+==================
+pub const fn apply<T>(value: T, f: impl [const] FnOnce(T) -> bool + [const] Destruct) -> bool
+where
+    T: [const] Destruct,
+{
+    f(value)
+}
+
+---
+
+(source_file
+  (function_item
+    (visibility_modifier)
+    (function_modifiers)
+    (identifier)
+    (type_parameters
+      (type_parameter
+        (type_identifier)))
+    (parameters
+      (parameter
+        (identifier)
+        (type_identifier))
+      (parameter
+        (identifier)
+        (bounded_type
+          (abstract_type
+            (conditional_const_trait_bound
+              (function_type
+                (type_identifier)
+                (parameters
+                  (type_identifier))
+                (primitive_type))))
+          (conditional_const_trait_bound
+            (type_identifier)))))
+    (primitive_type)
+    (where_clause
+      (where_predicate
+        (type_identifier)
+        (trait_bounds
+          (conditional_const_trait_bound
+            (type_identifier)))))
+    (block
+      (call_expression
+        (identifier)
+        (arguments
+          (identifier))))))
+
+==================
+Const impl and const unsafe impl
+==================
+const impl<T: [const] PartialEq> PartialEq for Record<T> {
+    fn eq(&self, other: &Self) -> bool { true }
+}
+const unsafe impl<T> TrivialClone for Record<T> where T: [const] TrivialClone {}
+
+---
+
+(source_file
+  (impl_item
+    (type_parameters
+      (type_parameter
+        (type_identifier)
+        (trait_bounds
+          (conditional_const_trait_bound
+            (type_identifier)))))
+    (type_identifier)
+    (generic_type
+      (type_identifier)
+      (type_arguments
+        (type_identifier)))
+    (declaration_list
+      (function_item
+        (identifier)
+        (parameters
+          (self_parameter
+            (self))
+          (parameter
+            (identifier)
+            (reference_type
+              (type_identifier))))
+        (primitive_type)
+        (block
+          (boolean_literal)))))
+  (impl_item
+    (type_parameters
+      (type_parameter
+        (type_identifier)))
+    (type_identifier)
+    (generic_type
+      (type_identifier)
+      (type_arguments
+        (type_identifier)))
+    (where_clause
+      (where_predicate
+        (type_identifier)
+        (trait_bounds
+          (conditional_const_trait_bound
+            (type_identifier)))))
+    (declaration_list)))
+
+==================
+Const closures
+==================
+fn run() {
+    let direct = const || 1;
+    let moved = const move |value: u32| -> u32 { value };
+}
+
+---
+
+(source_file
+  (function_item
+    (identifier)
+    (parameters)
+    (block
+      (let_declaration
+        (identifier)
+        (closure_expression
+          (closure_parameters)
+          (integer_literal)))
+      (let_declaration
+        (identifier)
+        (closure_expression
+          (closure_parameters
+            (parameter
+              (identifier)
+              (primitive_type)))
+          (primitive_type)
+          (block
+            (identifier)))))))
